@@ -8,4 +8,4 @@ print("A soma A+B é igual à:",soma,". A subtração A-B é igual à:", subtrac
 C=A
 A=B
 B=C
-print("O valor de A é:",A,"e o valor de B é:",B,")
+print("O valor de A é:",A,"e o valor de B é:",B)
