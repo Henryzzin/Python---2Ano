@@ -3,4 +3,4 @@ def calculo(lado):
     area_quadrado=lado**2
     return area_quadrado
 area=calculo(lado)
-print(area)
+print("A área do quadrado é de: ",area,"metros²")
