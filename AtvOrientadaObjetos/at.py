@@ -20,16 +20,18 @@ class Pai(Pessoa):
         self.filhos=[]
 
     def resumo(self):
-        print("Nome: ", self.nome)
-        print("Idade: ", self.idade)
-        print("CPF: ", self.cpf)
-        print("Endereço: ", self.endereco)
-        print("Sexo: ", self.sexo)
+        super().resumo()
+        
+        print(f"{self.esposa.nome} é a mulher de {self.nome}" if self.esposa else f"{self.nome} não tem esposa")
+        print(f"{self.nome} tem {len(self.filhos)} filhos")
+        print(f"Seus filhos se chamam: {[filho.nome for filho in self.filhos]}") 
 
-    def adicionarEsposa(self, esposa):
-        self.esposa=esposa
-    def adicionarFilhos(self, filhos):
-        self.filhos=filhos
+
+    def adicionarFilhos(self, filho):
+        if isinstance(filho, Filho):
+            self.filhos.append(filho)
+        else: 
+            print("O objeto fornecido não é uma instância da classe Filho.")
 
 class Mae(Pessoa):
     def __init__(self, idade, nome, cpf, endereco, sexo):
@@ -38,40 +40,42 @@ class Mae(Pessoa):
         self.filhos=[]
 
     def resumo(self):
-        print("Nome: ", self.nome)
-        print("Idade: ", self.idade)
-        print("CPF: ", self.cpf)
-        print("Endereço: ", self.endereco)
-        print("Sexo: ", self.sexo)
+        super().resumo()
+        print(f"{self.esposo.nome} é o marido de {self.nome}" if self.esposo else f"{self.nome} não tem esposo")
+        print(f"{self.nome} tem {len(self.filhos)} filhos")
+        print(f"Seus filhos se chamam: {[filho.nome for filho in self.filhos]}") 
 
-    def adicionarEsposo(self, pai):
-        self.pai=pai
-    def adicionarFilhos(self, filhos):
-        self.filhos=filhos
 
-class Filhos(Pessoa):
+    def adicionarFilhos(self, filho):
+        if isinstance(filho, Filho):
+            self.filhos.append(filho)
+        else: 
+            print("O objeto fornecido não é uma instância da classe Filho.")
+
+class Filho(Pessoa):
     def __init__(self, idade, nome, cpf, endereco, sexo):
         super().__init__(idade, nome, cpf, endereco, sexo)
-        self.esposo=None
-        self.esposa=None
+        self.pai=None
+        self.mae=None
 
     def resumo(self):
-        print("Nome: ", self.nome)
-        print("Idade: ", self.idade)
-        print("CPF: ", self.cpf)
-        print("Endereço: ", self.endereco)
-        print("Sexo: ", self.sexo)
+        super().resumo()
+        print(f"{self.pai.nome} é pai de {self.nome}" if self.pai else f"{self.nome} não tem pai definido")
+        print(f"{self.mae.nome} é mãe de {self.nome}" if self.mae else f"{self.nome} não tem mãe definida") 
 
-    def adicionarPaiMae(self, esposo, esposa):
-        self.pai=esposo
-        self.mae=esposa
+    def adicionarPaiMae(self, pai, mae):
+        if isinstance(pai, Pai) and isinstance(mae, Mae):
+            self.pai=pai
+            self.mae=mae
+            pai.adicionarFilhos(self)
+            mae.adicionarFilhos(self)
+        else:
+            print("Os objetos fornecidos não são instâncias das classes Pai e Mae.") 
 
-filho=Filhos(18, 'João', '091.142.719-82', 'Rua Marga', 'Masculino')
+filho=Filho(18, 'João', '091.142.719-82', 'Rua Marga', 'Masculino')
 esposo=Pai(44, 'Eduardo', '253.302.196-54', 'Rua Antonieta', 'Masculino')
 esposa=Mae(54, 'Sofia', '381.313.924-31', 'Rua Antonieta', 'Feminino')
 
-Pai.adicionarEsposa(esposa)
-Pai.adicionarFilhos(filho)
-Mae.adicionarFilhos(filho)
-Mae.adicionarEsposo(esposo)
-Filhos.adicionarPaiMae(esposo, esposa)
+esposo.adicionarFilhos(filho)
+esposa.adicionarFilhos(filho)
+filho.adicionarPaiMae(esposo, esposa)
